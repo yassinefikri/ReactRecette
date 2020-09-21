@@ -4,6 +4,7 @@ import Recette from './Components/Recette.js';
 import 'bootstrap/dist/css/bootstrap.css';
 
 class App extends React.Component {
+
   state = {
     recettes : [],
     newRecette : ''
@@ -18,6 +19,7 @@ class App extends React.Component {
       const ings = [];
       recettes.unshift({ id, nom , ings })
       this.setState({recettes , newRecette : ''});
+      localStorage.setItem(id, JSON.stringify({nom : nom,ings : ings}));
     }
   }
 
@@ -28,19 +30,38 @@ class App extends React.Component {
   editRecette = (recetteEdited) => {
     const recettes = [...this.state.recettes];
     const index = recettes.findIndex(function(recette){
-      return recette.id == recetteEdited.id
+      return recette.id === recetteEdited.id
     });
     recettes[index]= recetteEdited;
     this.setState({recettes});
+    localStorage.setItem(recettes[index].id, JSON.stringify({nom : recettes[index].nom,ings : recettes[index].ings}));
   }
 
   deleteRecette = (id) => {
     const recettes = [...this.state.recettes];
     const index = recettes.findIndex(function(recette){
-      return recette.id == id
+      return recette.id === id
     });
+    localStorage.removeItem(recettes[index].id);
     recettes.splice(index,1);
     this.setState({recettes});
+  }
+
+  componentDidMount() {
+    var keys = Object.keys(localStorage);
+    var l = keys.length;
+    if(l>0){
+      const recettes = [];
+      for(var i=0;i<keys.length;i++){
+        var ingR = [];
+        var rec = JSON.parse(localStorage.getItem(keys[i]));
+        for(var j=0;j<rec.ings.length;j++){
+          ingR.push({id : rec.ings[j].id, nom : rec.ings[j].nom});
+        }
+        recettes.push({id : keys[i], nom: rec.nom, ings : ingR});
+      }
+      this.setState({ recettes, newRecette : '' });
+    }
   }
 
   render(){

@@ -21,8 +21,8 @@ class Recette extends React.Component {
         if(this.state.newIng.length>0){
             const recette = this.state.recette;
             const id = new Date().getTime();
-            const name = this.state.newIng;
-            recette.ings.push({id, name});
+            const nom = this.state.newIng;
+            recette.ings.push({id, nom});
             this.setState({newIng : ''});
             this.props.editRecette(recette);
         }
@@ -31,7 +31,7 @@ class Recette extends React.Component {
     deleteIng = (ingid) =>{
         const recette = this.state.recette;
         const index = recette.ings.findIndex(function(ing){
-            return ing.id==ingid
+            return ing.id === ingid
         })
         recette.ings.splice(index,1);
         this.props.editRecette(recette);
@@ -50,7 +50,7 @@ class Recette extends React.Component {
                     <h6 className="card-subtitle mb-2 text-muted">Ingrédients</h6>
                     <ul className="list-group list-group-flush">
                         {this.state.recette.ings.map(ing => (
-                            <li className="list-group-item" key={ing.id}>{ing.name} <button onClick={() => this.deleteIng(ing.id)}>X</button></li>
+                            <li className="list-group-item" key={ing.id}>{ing.nom} <button onClick={() => this.deleteIng(ing.id)}>X</button></li>
                         ))}
                     </ul>
                     { this.state.isEdit ? (<div><hr/><form onSubmit={this.handleNewIngSubmit}>
