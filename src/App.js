@@ -52,7 +52,7 @@ class App extends React.Component {
     var l = keys.length;
     if(l>0){
       const recettes = [];
-      for(var i=0;i<keys.length;i++){
+      for(var i=0;i<l;i++){
         var ingR = [];
         var rec = JSON.parse(localStorage.getItem(keys[i]));
         for(var j=0;j<rec.ings.length;j++){
